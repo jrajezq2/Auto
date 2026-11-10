@@ -3,9 +3,11 @@ import os, json, subprocess
 import telebot
 from litellm import completion
 
-# သင့်ရဲ့ Token များနှင့် Key များကို ဤနေရာတွင် တိုက်ရိုက်ထည့်ပါ (သို့မဟုတ် Environment Variable မှ ခေါ်သုံးပါ)
-TG_TOKEN = os.environ.get("TG_TOKEN", "YOUR_TELEGRAM_BOT_TOKEN")
-GROQ_API_KEY = os.environ.get("GROQ_API_KEY", "YOUR_GROQ_API_KEY")
+# Telegram Bot Token နှင့် Groq API Key များကို Environment Variables မှ ယူပါမည်
+TG_TOKEN = os.environ.get("TG_TOKEN")
+GROQ_API_KEY = os.environ.get("GROQ_API_KEY")
+
+# မင်းသုံးခွင့်ရှိတဲ့ Model Name
 MODEL = "groq/openai/gpt-oss-120b"
 
 bot = telebot.TeleBot(TG_TOKEN)
@@ -70,7 +72,6 @@ def handle_target(message):
                 {"role": "user", "content": f"Scan this target: {target}"}]
     
     max_turns = 12
-    goal_completed = False
 
     try:
         for turn in range(max_turns):
@@ -88,8 +89,7 @@ def handle_target(message):
             calls = msg_dict.get("tool_calls") or []
             
             if not calls:
-                # Tool ဆက်မသုံးတော့ရင် (ပြီးဆုံးသွားရင်) Loop ထဲကထွက်ပါမယ်
-                goal_completed = True
+                # Tool ဆက်မသုံးတော့ရင် Loop ထဲကထွက်ပါမယ်
                 break
 
             messages.append(msg_dict)
@@ -109,7 +109,7 @@ def handle_target(message):
                     "content": out[:3500]
                 })
 
-        # Loop အပြင်ရောက်တဲ့အခါ Report ဖိုင်ကို Telegram သို့ Document အဖြစ် ပို့ပါမယ်
+        # Report ဖိုင်ကို Telegram သို့ Document အဖြစ် ပို့ပါမယ်
         if os.path.exists("findings.md"):
             with open("findings.md", "rb") as report_file:
                 bot.send_document(
@@ -124,5 +124,5 @@ def handle_target(message):
         bot.reply_to(message, f"❌ အမှားအယွင်းဖြစ်ပေါ်ခဲ့ပါသည်: {e}")
 
 if __name__ == "__main__":
-    print("Bot is listening...")
+    print("Bot is listening for commands from Telegram...")
     bot.infinity_polling()
