@@ -10,7 +10,7 @@ client = OpenAI(
     api_key=os.environ["GROQ_API_KEY"],
     base_url="https://api.groq.com/openai/v1",
 )
-MODEL = "llama-3.3-70b-versatile"   # Groq ရဲ့ fast 70B
+MODEL = "groq/openai/gpt-oss-120b"   # Groq ရဲ့ fast 70B
 
 
 def tg_send(text: str):
