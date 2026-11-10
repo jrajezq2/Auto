@@ -1,16 +1,4 @@
-openai>=1.40.0
-requests>=2.31.0
+pyTelegramBotAPI
 litellm
-# NOVA AI Agent Pro - Requirements
-
-# Core Telegram Bot library
-pyTelegramBotAPI==4.15.4
-
-# LiteLLM for routing to different AI providers
-litellm==1.17.9
-
-# Requests for HTTP calls (used internally by telebot and custom tools)
-requests==2.31.0
-
-# Optional: For loading environment variables locally (if needed)
-python-dotenv==1.0.0
+requests
+python-dotenv
